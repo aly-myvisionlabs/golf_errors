@@ -186,6 +186,44 @@ def identify_swing_phases(keypoints, video_path=None, output_path=None):
     
     return phase_frames
 
+def save_comparison_frames(video, output_dir, events):
+    """
+    Save comparison frames for each event in the output directory.
+    
+    Args:
+        video_path (str): Path to the source video file.
+        output_path (str): Path to save the comparison frames.
+        events (dict): Dictionary mapping event names to frame numbers.
+    """
+    # Create output directory if it doesn't exist
+    print(f"Creating output directory: {output_path}")
+    os.makedirs(output_path, exist_ok=True) 
+    
+    # Open video
+    print("Saving comparison frames...")
+            
+    # Create comparison directory
+    comparison_dir = os.path.join(output_dir, "comparison_frames")
+    os.makedirs(comparison_dir, exist_ok=True)
+    
+    # Open both videos
+    cap = cv2.VideoCapture(video) 
+
+    
+    # Save frames for each event
+    for event_name, frame_num in events.items():
+        if cap:
+            cap.set(cv2.CAP_PROP_POS_FRAMES, frame_num)
+            ret, frame = cap.read()
+            if ret:
+                cv2.imwrite(os.path.join(comparison_dir, f"{frame_num}.jpg"), frame)
+        
+        
+    
+    # Release video captures
+    cap.release()
+    print(f"Comparison frames saved to {comparison_dir}")
+    
 if __name__ == "__main__":
     # Example usage
     from extract_poses import extract_video_keypoints

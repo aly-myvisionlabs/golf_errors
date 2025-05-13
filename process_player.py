@@ -2,14 +2,14 @@ import os
 import argparse
 import numpy as np
 from errors import process_swing_data, detect_swaying, detect_sliding, detect_loss_of_posture_dtl, detect_early_extension_dtl
-from extract_phases import identify_swing_phases
+from extract_phases import identify_swing_phases, save_comparison_frames
 from extract_poses import extract_video_keypoints
 from visualize_errors import create_error_visualizations
 
 def process_player(dtl_video=None, front_video=None, output_dir="results", 
                  detect_sway=False, detect_slide=False, 
                  detect_posture=False, detect_early_extension=False,
-                 create_visualizations=True, is_right_handed=True):
+                 create_visualizations=True, comparison= False,is_right_handed=True):
     """
     Detect specified golf swing errors from video inputs.
     
@@ -53,10 +53,17 @@ def process_player(dtl_video=None, front_video=None, output_dir="results",
     events = None
     if front_video:
         print("Identifying swing phases...")
-        events = identify_swing_phases(front_keypoints, video_path=front_video, 
-                                     output_path=os.path.join(output_dir, "phases"))
+        events = identify_swing_phases(front_keypoints, video_path=front_video)
         print(f"Identified phases: {events}")
-    
+    if comparison:
+        if events is None:
+            print("Cannot compare: Could not identify swing phases")
+        else:
+            if dtl_video is not None:
+                save_comparison_frames(dtl_video, output_dir, events)
+            if front_video is not None:
+                save_comparison_frames(front_video, output_dir, events)
+                
     # Check if we have the required data for each requested error detection
     if detect_sway or detect_slide:
         if not front_video:

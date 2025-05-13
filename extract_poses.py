@@ -1,8 +1,13 @@
 from ultralytics import YOLO
 import numpy as np
 import cv2
+import os
 
-def extract_video_keypoints(video_path, model_path=r"C:\Users\opsiclear_user\projects\golf_errors\models\yolo11x-pose.pt"):
+# Get the absolute path to the project root directory
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(ROOT_DIR, "models", "yolo11x-pose.pt")
+
+def extract_video_keypoints(video_path, model_path=MODEL_PATH):
     """
     Extract keypoints from a video using YOLO pose estimation.
     

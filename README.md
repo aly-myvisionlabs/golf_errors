@@ -34,7 +34,8 @@ conda env create -f environment.yaml
    git clone https://github.com/yangchris11/samurai.git
    cd ..
    ```
-
+  Follow their instructions to download checkpoints here: https://github.com/yangchris11/samurai
+  
 ## Project Structure
 
 - `process_player.py`: Main script for processing individual player swings
